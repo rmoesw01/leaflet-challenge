@@ -11,7 +11,7 @@ function displayMap(inputData) {
     }
 
     // create GeoJSON layer
-    var earthquakes = L.geoJSON(earthquakeData, {
+    var earthquakes = L.geoJSON(inputData, {
         onEachFeature: onEachFeature
     });
 
@@ -20,7 +20,15 @@ function displayMap(inputData) {
     maxZoom: 18,
     id: "light-v10",
     accessToken: API_KEY
-  });
+    });
+
+    var myMap = L.map("map", {
+        center: [
+          37.09, -95.71
+        ],
+        zoom: 5,
+        layers: [lightmap]
+      });
 }
 
 d3.json(url, function(response) {
