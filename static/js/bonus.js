@@ -66,6 +66,33 @@ function displayMap(inputData) {
     accessToken: API_KEY
     });
 
+    var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "outdoors-v9",
+    accessToken: API_KEY
+    });
+
+    var satellite = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "satellite-streets-v9",
+    accessToken: API_KEY
+    });
+
+    // Create a baseMaps object
+    var baseMaps = {
+        "Satellite": satellite,
+        "Grayscale": lightmap,
+        "Outdoors": outdoors
+    };
+    
+    // Create an overlay object
+    var overlayMaps = {
+        "Earthquakes": earthquakes
+        // ,"Fault Lines": faultLines
+    };
+
     var myMap = L.map("map", {
         center: [
           0, 0
@@ -73,6 +100,10 @@ function displayMap(inputData) {
         zoom: 2,
         layers: [lightmap, earthquakes]
     });
+
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+    }).addTo(myMap);
 
     // var legend = L.control({position: 'bottomright'});
     // legend.onAdd = function (myMap) {
@@ -115,3 +146,4 @@ function displayMap(inputData) {
 d3.json(url, function(response) {
     displayMap(response.features);
 });
+
