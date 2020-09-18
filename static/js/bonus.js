@@ -11,9 +11,7 @@ function displayMap(inputData) {
           "</p><br><p>Magnitude:" + feature.properties.mag + "</p>");
     }
 
-    function createCircles(feature){
-        magnitude = feature.properties.mag
-        // for (var i = 0; i < feature.length; i++) {
+    function getColor(magnitude) {
         var color = "";
 
         if (magnitude > 5) {
@@ -34,6 +32,12 @@ function displayMap(inputData) {
         else {
             color = '#00FF00';
         }
+        return color;
+    }
+
+    function createCircles(feature){
+        magnitude = feature.properties.mag;
+        var color = getColor(magnitude);
         // }
 
         var geojsonMarkerOptions = {
@@ -68,7 +72,27 @@ function displayMap(inputData) {
         ],
         zoom: 2,
         layers: [lightmap, earthquakes]
-      });
+    });
+
+    // var legend = L.control({position: 'bottomright'});
+    // legend.onAdd = function (myMap) {
+
+    // var div = L.DomUtil.create('div', 'info legend');
+    // labels = ['<strong>Categories</strong>'],
+    // categories = ['0-1','1-2','2-3','3-4','4-5','5+'];
+
+    // for (var i = 0; i < categories.length; i++) {
+
+    //         div.innerHTML += 
+    //         labels.push(
+    //             '<i style="background:' + getColor(i+0.1) + '"></i>' +
+    //         (categories[i] ? categories[i] : '+'));
+
+    //     }
+    //     div.innerHTML = labels.join('<br>');
+    // return div;
+    // };
+    // legend.addTo(myMap);
 
     /*Legend specific*/
     var legend = L.control({ position: "bottomright" });
@@ -83,9 +107,9 @@ function displayMap(inputData) {
         div.innerHTML += '<i style="background: #FF0000"></i><span>5+</span><br>';
 
         return div;
-        };
-        
-        legend.addTo(myMap);
+      };
+      
+      legend.addTo(myMap);
 }
 
 d3.json(url, function(response) {
