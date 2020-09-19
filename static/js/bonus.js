@@ -1,9 +1,6 @@
-// <div id="map"></div>
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 function displayMap(inputData, inputData2) {
-// function displayMap(inputData) {
-    console.log(inputData);
     // Puts the place and time in a popup for the feature
     function onEachFeature(feature, layer) {
         // add a popup to each marker
