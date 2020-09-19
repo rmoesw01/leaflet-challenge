@@ -1,19 +1,18 @@
-// <div id="map"></div>
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 function displayMap(inputData) {
-    
     // Puts the place and time in a popup for the feature
     function onEachFeature(feature, layer) {
-
+        // add a popup to each marker
         layer.bindPopup("<h3>" + feature.properties.place +
           "</h3><hr><p>" + new Date(feature.properties.time) + 
           "</p><br><p>Magnitude:" + feature.properties.mag + "</p>");
     }
 
+    // function to get the color of the marker based on the magnitude of the earthquake
     function createCircles(feature){
         magnitude = feature.properties.mag
-        // for (var i = 0; i < feature.length; i++) {
+        
         var color = "";
 
         if (magnitude > 5) {
@@ -34,8 +33,8 @@ function displayMap(inputData) {
         else {
             color = '#00FF00';
         }
-        // }
-
+        
+        // set the style settings for the markers
         var geojsonMarkerOptions = {
             radius: magnitude * 5,
             fillColor: color,
@@ -44,6 +43,8 @@ function displayMap(inputData) {
             opacity: 1,
             fillOpacity: 0.8
         };
+
+        // get the latitude and longitude of the earthquake
         var latlng = L.latLng([feature.geometry.coordinates[1],feature.geometry.coordinates[0]])
         console.log(latlng);
         return L.circleMarker(latlng, geojsonMarkerOptions);
@@ -55,6 +56,7 @@ function displayMap(inputData) {
         pointToLayer: createCircles
     });
 
+    // create the Base Layer with a light background
     var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
@@ -62,6 +64,7 @@ function displayMap(inputData) {
     accessToken: API_KEY
     });
 
+    // Create the map with the default settings
     var myMap = L.map("map", {
         center: [
           0, 0
@@ -73,6 +76,7 @@ function displayMap(inputData) {
     /*Legend specific*/
     var legend = L.control({ position: "bottomright" });
 
+    // create the color and value display of the legend
     legend.onAdd = function(myMap) {
         var div = L.DomUtil.create("div", "legend");
         div.innerHTML += '<i style="background: #00FF00"></i><span>0-1</span><br>';
@@ -88,6 +92,8 @@ function displayMap(inputData) {
         legend.addTo(myMap);
 }
 
+// read in the earthquake data
 d3.json(url, function(response) {
+    // call the displayMap function, passing the data set
     displayMap(response.features);
 });
