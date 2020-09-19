@@ -1,8 +1,9 @@
 // <div id="map"></div>
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
-function displayMap(inputData) {
-    
+function displayMap(inputData, inputData2) {
+// function displayMap(inputData) {
+    console.log(inputData);
     // Puts the place and time in a popup for the feature
     function onEachFeature(feature, layer) {
 
@@ -49,15 +50,22 @@ function displayMap(inputData) {
             fillOpacity: 0.8
         };
         var latlng = L.latLng([feature.geometry.coordinates[1],feature.geometry.coordinates[0]])
-        console.log(latlng);
+        // console.log(latlng);
         return L.circleMarker(latlng, geojsonMarkerOptions);
     }
 
+    var earthquakes = L.layerGroup();
+    var faultLines = L.layerGroup();
+
     // create GeoJSON layer
-    var earthquakes = L.geoJSON(inputData, {
+    L.geoJSON(inputData, {
         onEachFeature: onEachFeature,
         pointToLayer: createCircles
-    });
+    }).addTo(earthquakes);
+
+     L.geoJSON(inputData2, {
+         fillOpacity: 0
+     }).addTo(faultLines);
 
     var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -90,7 +98,7 @@ function displayMap(inputData) {
     // Create an overlay object
     var overlayMaps = {
         "Earthquakes": earthquakes
-        // ,"Fault Lines": faultLines
+        ,"Fault Lines": faultLines
     };
 
     var myMap = L.map("map", {
@@ -104,26 +112,6 @@ function displayMap(inputData) {
     L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
     }).addTo(myMap);
-
-    // var legend = L.control({position: 'bottomright'});
-    // legend.onAdd = function (myMap) {
-
-    // var div = L.DomUtil.create('div', 'info legend');
-    // labels = ['<strong>Categories</strong>'],
-    // categories = ['0-1','1-2','2-3','3-4','4-5','5+'];
-
-    // for (var i = 0; i < categories.length; i++) {
-
-    //         div.innerHTML += 
-    //         labels.push(
-    //             '<i style="background:' + getColor(i+0.1) + '"></i>' +
-    //         (categories[i] ? categories[i] : '+'));
-
-    //     }
-    //     div.innerHTML = labels.join('<br>');
-    // return div;
-    // };
-    // legend.addTo(myMap);
 
     /*Legend specific*/
     var legend = L.control({ position: "bottomright" });
@@ -144,6 +132,8 @@ function displayMap(inputData) {
 }
 
 d3.json(url, function(response) {
-    displayMap(response.features);
+    d3.json('static/data/plates.json', function(plateData){
+        displayMap(response.features, plateData.features);
+    });
 });
 
