@@ -26,3 +26,6 @@
         * Earthquakes (for the past week)
         * Fault Lines
     * User can zoom and move around on map
+
+Sample Map showing the US with both the earthquake and faultline layers
+![1-Logo](static/Images/US-map.GIF)
