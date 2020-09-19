@@ -10,7 +10,7 @@
     * mapbox API - used for the background tile layers
         * you will need an API key for this
             * create a config.js file and place in the /static/js folder
-            * set API_KEY = "\<your API key>"
+            * in the config file set API_KEY = "\<your API key>"
 
 ## Data
 * The earthquake data comes from a geoJSON file from the usgs.gov website (https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson)
