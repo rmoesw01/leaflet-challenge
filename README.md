@@ -3,7 +3,7 @@
 
 ## Programming Languages
 * HTML - display platform
-* CSS - formatting for display format
+* CSS - formatting for map and legend display
 * JavaScript - allows for dynamic display from multiple data samples
     * D3 - used to read in the JSON files and create the data sets
     * Leaflet - used to build the layers of the map
